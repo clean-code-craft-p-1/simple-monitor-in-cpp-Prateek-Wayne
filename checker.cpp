@@ -31,15 +31,22 @@ void printCriticalMessage(string message) {
     }
 }
 
-bool checkTemperature(float temperature, string unit = "Fahrenheit") {
-    // Convert temperature to Fahrenheit if unit is "Celsius"
-    temperature = (unit == "Celsius") ? temperature * 9/5 + 32 : temperature;
-
-    if (temperature > 102 || temperature < 95) {
-        printCriticalMessage("Temperature critical!");
-        return false;
+float convertTemperature(float temperature, string unit) {
+    if (unit == "Celsius") {
+        temperature = temperature * 9/5 + 32;
     }
-    return true;
+    return temperature;
+}
+
+bool isTemperatureCritical(float temperature) {
+    return (temperature > 102 || temperature < 95);
+}
+
+void checkTemperature(float temperature, string unit = "Fahrenheit") {
+    temperature = convertTemperature(temperature, unit);
+    if (isTemperatureCritical(temperature)) {
+        printCriticalMessage("Temperature critical!");
+    }
 }
 
 bool checkPulseRate(float pulseRate) {
