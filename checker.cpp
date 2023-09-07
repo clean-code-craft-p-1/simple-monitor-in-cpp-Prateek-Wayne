@@ -1,10 +1,27 @@
 #include <iostream>
 #include <assert.h>
 #include <unistd.h>
+#include <map>
 using namespace std;
 
+string language = "German"; // global variable to set the language
+//Contains Transltons...
+map<string, map<string, string>> translations = {
+    {"English", {
+        {"Temperature critical!", "Temperature critical!"},
+        {"Pulse Rate is out of range!", "Pulse Rate is out of range!"},
+        {"Oxygen Saturation out of range!", "Oxygen Saturation out of range!"}
+    }},
+    {"German", {
+        {"Temperature critical!", "Kritische Temperatur!"},
+        {"Pulse Rate is out of range!", "Pulsfrequenz außerhalb des Bereichs!"},
+        {"Oxygen Saturation out of range!", "Sauerstoffsättigung außerhalb des Bereichs!"}
+    }}
+};
+
+
 void printCriticalMessage(string message) {
-    cout << message << endl;
+    cout << translations[language][message] << endl;
     for (int i = 0; i < 6; i++)
     {
         cout << "\r* " << flush;
@@ -14,45 +31,22 @@ void printCriticalMessage(string message) {
     }
 }
 
-void printWarningMessage() {
-    cout << "Approaching hypothermia" << endl;
-}
-
-bool istemperatureCritical(float temperature){
-    return temperature > 102 || temperature < 95;
-}
-bool isTemperatureWarning(float temperature) {
-    float warningTolerance = 102 * 0.015;
-    return temperature >= 102 - warningTolerance || temperature <= 95 + warningTolerance;
-}
-
-bool checkTemperature(float temperature) {
-
-    if (isTemperatureWarning(temperature)) {
-        printWarningMessage();
+bool checkTemperature(float temperature, string unit = "Fahrenheit") {
+    // Convert temperature to Fahrenheit if unit is "Celsius"
+    if (unit == "Celsius") {
+        temperature = temperature * 9/5 + 32;
     }
-    else if (istemperatureCritical(temperature)) {
+   
+
+    if (temperature > 102 || temperature < 95) {
         printCriticalMessage("Temperature critical!");
         return false;
     }
     return true;
 }
 
-bool ispulseRateCritical(float pulseRate){
-    return pulseRate < 60 || pulseRate > 100;
-}
-bool ispulseRateWarning(float pulseRate)
-{   
-    float warningTolerance = 100 * 0.015;
-    return pulseRate >= 100 - warningTolerance || pulseRate <= 60 + warningTolerance;
-}
-
 bool checkPulseRate(float pulseRate) {
-    
-    if (ispulseRateWarning(pulseRate)) {
-        printWarningMessage();
-    }
-    else if (ispulseRateCritical(pulseRate)) {
+    if (pulseRate < 60 || pulseRate > 100) {
         printCriticalMessage("Pulse Rate is out of range!");
         return false;
     }
@@ -60,18 +54,15 @@ bool checkPulseRate(float pulseRate) {
 }
 
 bool checkSpo2(float spo2) {
-    float warningTolerance = 90 * 0.015;
     if (spo2 < 90) {
         printCriticalMessage("Oxygen Saturation out of range!");
         return false;
-    }
-    else if (spo2 <= 90 - warningTolerance) {
-        printWarningMessage();
     }
     return true;
 }
 
 int vitalsOk(float temperature, float pulseRate, float spo2) {
+    //provide temperature unit in checkTemperature. by default Fahrenheit
     return checkTemperature(temperature) && checkPulseRate(pulseRate) && checkSpo2(spo2);
 }
 
