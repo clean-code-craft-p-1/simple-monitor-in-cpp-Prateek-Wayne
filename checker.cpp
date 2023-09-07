@@ -14,26 +14,42 @@ void printCriticalMessage(string message) {
     }
 }
 
+void printWarningMessage() {
+    cout << "Approaching hypothermia" << endl;
+}
+
 bool checkTemperature(float temperature) {
+    float warningTolerance = 102 * 0.015;
     if (temperature > 102 || temperature < 95) {
         printCriticalMessage("Temperature critical!");
         return false;
+    }
+    else if (temperature >= 102 - warningTolerance || temperature <= 95 + warningTolerance) {
+        printWarningMessage();
     }
     return true;
 }
 
 bool checkPulseRate(float pulseRate) {
+    float warningTolerance = 100 * 0.015;
     if (pulseRate < 60 || pulseRate > 100) {
         printCriticalMessage("Pulse Rate is out of range!");
         return false;
+    }
+    else if (pulseRate >= 100 - warningTolerance || pulseRate <= 60 + warningTolerance) {
+        printWarningMessage();
     }
     return true;
 }
 
 bool checkSpo2(float spo2) {
+    float warningTolerance = 90 * 0.015;
     if (spo2 < 90) {
         printCriticalMessage("Oxygen Saturation out of range!");
         return false;
+    }
+    else if (spo2 <= 90 - warningTolerance) {
+        printWarningMessage();
     }
     return true;
 }
