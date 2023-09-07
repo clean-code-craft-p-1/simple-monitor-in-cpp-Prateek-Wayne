@@ -18,26 +18,43 @@ void printWarningMessage() {
     cout << "Approaching hypothermia" << endl;
 }
 
-bool checkTemperature(float temperature) {
+bool istemperatureCritical(float temperature){
+    return temperature > 102 || temperature < 95;
+}
+bool isTemperatureWarning(float temperature) {
     float warningTolerance = 102 * 0.015;
-    if (temperature > 102 || temperature < 95) {
+    return temperature >= 102 - warningTolerance || temperature <= 95 + warningTolerance;
+}
+
+bool checkTemperature(float temperature) {
+
+    if (isTemperatureWarning(temperature)) {
+        printWarningMessage();
+    }
+    else if (istemperatureCritical(temperature)) {
         printCriticalMessage("Temperature critical!");
         return false;
-    }
-    else if (temperature >= 102 - warningTolerance || temperature <= 95 + warningTolerance) {
-        printWarningMessage();
     }
     return true;
 }
 
-bool checkPulseRate(float pulseRate) {
+bool ispulseRateCritical(float pulseRate){
+    return pulseRate < 60 || pulseRate > 100;
+}
+bool ispulseRateWarning(float pulseRate)
+{   
     float warningTolerance = 100 * 0.015;
-    if (pulseRate < 60 || pulseRate > 100) {
+    return pulseRate >= 100 - warningTolerance || pulseRate <= 60 + warningTolerance;
+}
+
+bool checkPulseRate(float pulseRate) {
+    
+    if (ispulseRateWarning(pulseRate)) {
+        printWarningMessage();
+    }
+    else if (ispulseRateCritical(pulseRate)) {
         printCriticalMessage("Pulse Rate is out of range!");
         return false;
-    }
-    else if (pulseRate >= 100 - warningTolerance || pulseRate <= 60 + warningTolerance) {
-        printWarningMessage();
     }
     return true;
 }
