@@ -33,10 +33,7 @@ void printCriticalMessage(string message) {
 
 bool checkTemperature(float temperature, string unit = "Fahrenheit") {
     // Convert temperature to Fahrenheit if unit is "Celsius"
-    if (unit == "Celsius") {
-        temperature = temperature * 9/5 + 32;
-    }
-   
+    temperature = (unit == "Celsius") ? temperature * 9/5 + 32 : temperature;
 
     if (temperature > 102 || temperature < 95) {
         printCriticalMessage("Temperature critical!");
