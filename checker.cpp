@@ -42,11 +42,15 @@ bool isTemperatureCritical(float temperature) {
     return (temperature > 102 || temperature < 95);
 }
 
-void checkTemperature(float temperature, string unit = "Fahrenheit") {
+bool checkTemperature(float temperature, string unit = "Fahrenheit") {
+    // Convert temperature to Fahrenheit if unit is "Celsius"
+    
     temperature = convertTemperature(temperature, unit);
     if (isTemperatureCritical(temperature)) {
         printCriticalMessage("Temperature critical!");
+        return false;
     }
+    return true;
 }
 
 bool checkPulseRate(float pulseRate) {
